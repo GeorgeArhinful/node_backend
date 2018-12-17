@@ -35,8 +35,6 @@ const db = [
 // meddleware for checking if user have a token
 const authUser =(req ,  res , next)=>{
     const headerInfo = req.headers['authorization'];
-    console.log('request',req);
-    
     // checking to see if toke exist in the headers or cookies or query
     if(typeof headerInfo !== 'undefined'){
         const headerInfoSplit = headerInfo.split(' ');
@@ -63,7 +61,7 @@ function logout(req , res , next){
     req.query = {};
     req.headers['authorization'] = null
     // res.cookies.token = null
-    console.log(req);
+   
     
     next();
 }
@@ -98,8 +96,6 @@ app.get('/login', (req, res) => {
 
 // login route;
 app.post('/login', checkUserAtDB,(req, res) => {
-    console.log(req.body);
-    console.log('db',db);
     
     if (req.userInfo && req.userInfo.userName) {
     jwt.sign({...req.body},'My_name',{ expiresIn: 3000 },(err, token) => {
@@ -150,7 +146,6 @@ res.redirect('/login')
 
 // homepage route
 app.get('/profile', authUser, (req, res) => {
-    console.log('hhhh',req.token);
     jwt.verify(req.token,'My_name',(err , data)=>{
         if(err){
             res.send({
